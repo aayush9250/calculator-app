@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    
+</head>
+<body>
+    
+        <div class="parent">
+            <div id="display" class="display">0</div>
+            <div class="buttons">
+
+            <button onclick="clearDisplay()">AC</button>
+            <button onclick="Delete()">X</button>
+            <button onclick="appendDecimal('')">.</button>
+            <button onclick="calculate('=')">=</button>
+
+            <button onclick="appendOperator('/')">/</button>
+            <button onclick="appendOperator('*')">*</button>
+            <button onclick="appendOperator('-')">-</button>
+            <button onclick="appendOperator('+')">+</button>
+            <button onclick="appendOperator('%')">%</button>
+           
+            <button onclick="appendNumber('1')">1</button>
+            <button onclick="appendNumber('2')">2</button>
+            <button onclick="appendNumber('3')">3</button>
+            <button onclick="appendNumber('4')">4</button>
+            <button onclick="appendNumber('5')">5</button>
+            <button onclick="appendNumber('6')">6</button>
+            <button onclick="appendNumber('7')">7</button>
+            <button onclick="appendNumber('8')">8</button>
+            <button onclick="appendNumber('9')">9</button>
+            <button onclick="appendNumber('0')">0</button>
+
+        </div>
+        </div>
+
+        <script>
+
+            let display = document.getElementById('display')
+            let currentInput = '';
+            let resultShown = false;
+
+            function appendNumber(number){
+                if(resultShown){
+                    currentInput='';
+                    resultShown = false
+                }
+
+                currentInput += number;
+                resultShown = false 
+                updateDisplay();
+            }
+
+            function appendOperator(operator){
+                if(currentInput ==='')return;
+                if(/[+\-*/%]$/.test(currentInput)){
+                    currentInput = currentInput.slice(0,-1)
+                }
+                currentInput += operator;
+                resultShown = false;
+                updateDisplay();
+            }
+
+            function appendDecimal(decimal){
+                const parts = currentInput.split(/[\+\-\*/%]/);
+                const last = parts[parts.length-1];
+
+                if(!last.includes('.')){
+                    currentInput += '.';
+                    updateDisplay();
+                }
+            }
+
+            function Delete(){
+                currentInput = currentInput.slice(0,-1)
+                updateDisplay(currentInput || '0')
+            }
+
+
+                function clearDisplay(){
+                    currentInput ='';
+                    updateDisplay('0')
+                }
+
+
+            function calculate(){
+                try{
+                    let result = eval(currentInput)
+                    updateDisplay(result)
+                    currentInput = result.toString();
+                    resultShown = true;
+                }
+                catch{
+                    updateDisplay('Error');
+                    currentInput='';
+                }
+            }
+            function updateDisplay(content = currentInput){
+                display.textContent = content;
+            }
+
+
+
+        </script>
+
+</body>
+</html>
